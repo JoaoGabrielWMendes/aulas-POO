@@ -33,13 +33,13 @@ class Banco:
         return 
     
     def quantidade_contas(self):
-        return len(self.lista_contas)
+        print(f"Quantidade de contas: {len(self.lista_contas)}")
     
     def total_valor_em_contas(self):
         total = 0
         for conta in self.lista_contas:
             total += conta.saldo
-        return total
+        print(f"Valor total em contas: R${total}")
 
 banco = Banco("Banco do Brasil", [])
 print(banco.nome)
@@ -61,5 +61,5 @@ conta_bancaria2.consultar_saldo()
 conta_bancaria3.consultar_saldo()
 
 banco.mostrar_contas()
-print(f"Quantidade de contas: {banco.quantidade_contas()}")
-print(f"Valor total das contas: {banco.total_valor_em_contas()}")
+banco.quantidade_contas()
+banco.total_valor_em_contas()
