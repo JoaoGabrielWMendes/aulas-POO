@@ -22,13 +22,12 @@ class Banco:
         self.nome = nome
         self.lista_contas = lista_contas
 
-    def adicionar_conta(self, titular, numero, saldo):
-        conta = Conta_bancária(titular, numero, saldo)
-        self.lista_contas.append(conta)
+    def adicionar_conta(self, conta_bancaria):
+        self.lista_contas.append(conta_bancaria)
 
     def mostrar_contas(self):
         for conta in self.lista_contas:
-            print(f'Titular: {conta.titular}, Número: {conta.numero}, Saldo: {conta.saldo}')
+            return (f'Titular: {conta.titular}, Número: {conta.numero}, Saldo: {conta.saldo}')
 
     def quantidade_contas(self):
         return len(self.lista_contas)
@@ -38,8 +37,25 @@ class Banco:
         for conta in self.lista_contas:
             total += conta.saldo
         return total
+def opcoes_conta_bancária():
+    print("Opçoes de conta: ")
 
-banco = Banco("Banco do Brasil", [])
+def opcoes_banco():
+    print("Opções do banco:")
+
+opcoes = {
+    1: opcoes_conta_bancária(),
+    2: opcoes_banco(), 
+}
+print("Opções disponíveis:\n1: Contas bancárias\n2: Banco")
+opcao=int(input("O que você deseja fazer? "))
+if opcao in opcoes.items():
+    opcoes(opcao)
+else: 
+    print("Opção inválida, tente novamente.")
+
+
+'''banco = Banco("Banco do Brasil", [])
 conta_bancaria1 = Conta_bancária("João", "1234", 1000)
 conta_bancaria2 = Conta_bancária("Maria", "5678", 2000)
 conta_bancaria3 = Conta_bancária("Pedro", "9101", 3000)
@@ -47,7 +63,8 @@ banco.adicionar_conta(conta_bancaria1)
 banco.adicionar_conta(conta_bancaria2)
 banco.adicionar_conta(conta_bancaria3)
 conta_bancaria1.depositar(500)
-conta_bancaria2.sacar(3000)
+print(conta_bancaria1.consultar_saldo())
+print(conta_bancaria2.sacar(3000))
 print(banco.mostrar_contas())
 print(banco.quantidade_contas())
-print(banco.total_valor_em_contas())
+print(banco.total_valor_em_contas())'''
