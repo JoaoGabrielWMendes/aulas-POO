@@ -6,17 +6,19 @@ class Conta_bancária:
 
     def depositar(self, valor):
         self.saldo += valor
-        return self.saldo
+        print(f"Adicionado R${valor} na conta {self.titular}")
+        return
 
     def sacar(self, valor):
         if valor > self.saldo:
-            return "Saldo insuficiente"
+            print("Saldo insuficiente")
+            return
         self.saldo -= valor
-        return self.saldo
-        
+        print(f"Sacado R${valor} na conta {self.titular}")
+
     def consultar_saldo(self):
-        return self.saldo
-        
+        print(f"Saldo da conta {self.titular}: R${self.saldo}")
+
 class Banco:
     def __init__(self, nome, lista_contas):
         self.nome = nome
@@ -27,8 +29,9 @@ class Banco:
 
     def mostrar_contas(self):
         for conta in self.lista_contas:
-            return (f'Titular: {conta.titular}, Número: {conta.numero}, Saldo: {conta.saldo}')
-
+            print (f"Titular: {conta.titular}, Número: {conta.numero}, Saldo: {conta.saldo}")
+        return 
+    
     def quantidade_contas(self):
         return len(self.lista_contas)
     
@@ -37,34 +40,26 @@ class Banco:
         for conta in self.lista_contas:
             total += conta.saldo
         return total
-def opcoes_conta_bancária():
-    print("Opçoes de conta: ")
 
-def opcoes_banco():
-    print("Opções do banco:")
+banco = Banco("Banco do Brasil", [])
+print(banco.nome)
 
-opcoes = {
-    1: opcoes_conta_bancária(),
-    2: opcoes_banco(), 
-}
-print("Opções disponíveis:\n1: Contas bancárias\n2: Banco")
-opcao=int(input("O que você deseja fazer? "))
-if opcao in opcoes.items():
-    opcoes(opcao)
-else: 
-    print("Opção inválida, tente novamente.")
-
-
-'''banco = Banco("Banco do Brasil", [])
 conta_bancaria1 = Conta_bancária("João", "1234", 1000)
 conta_bancaria2 = Conta_bancária("Maria", "5678", 2000)
 conta_bancaria3 = Conta_bancária("Pedro", "9101", 3000)
+
 banco.adicionar_conta(conta_bancaria1)
 banco.adicionar_conta(conta_bancaria2)
 banco.adicionar_conta(conta_bancaria3)
+
 conta_bancaria1.depositar(500)
-print(conta_bancaria1.consultar_saldo())
-print(conta_bancaria2.sacar(3000))
-print(banco.mostrar_contas())
-print(banco.quantidade_contas())
-print(banco.total_valor_em_contas())'''
+conta_bancaria2.sacar(3000)
+conta_bancaria3.sacar(1000)
+
+conta_bancaria1.consultar_saldo()
+conta_bancaria2.consultar_saldo()
+conta_bancaria3.consultar_saldo()
+
+banco.mostrar_contas()
+print(f"Quantidade de contas: {banco.quantidade_contas()}")
+print(f"Valor total das contas: {banco.total_valor_em_contas()}")
