@@ -169,23 +169,5 @@ def menu_principal():
                 print("Opção inválida. Tente novamente.")
         except ValueError:
             print("Entrada inválida. Por favor, digite um número.")
+            
 menu_principal()
-'''conta_bancaria1 = Conta_bancaria("João", "1234", 1000)
-conta_bancaria2 = Conta_bancaria("Maria", "5678", 2000)
-conta_bancaria3 = Conta_bancaria("Pedro", "9101", 3000)
-
-banco.adicionar_conta(conta_bancaria1)
-banco.adicionar_conta(conta_bancaria2)
-banco.adicionar_conta(conta_bancaria3)
-
-conta_bancaria1.depositar(500)
-conta_bancaria2.sacar(3000)
-conta_bancaria3.sacar(1000)
-
-conta_bancaria1.consultar_saldo()
-conta_bancaria2.consultar_saldo()
-conta_bancaria3.consultar_saldo()
-
-banco.mostrar_contas()
-banco.quantidade_contas()
-banco.total_valor_em_contas()'''
