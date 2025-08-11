@@ -42,6 +42,19 @@ class Banco:
             total += conta.saldo
         return total
 
+def escolher_banco():
+    nome_banco = input("Digite o nome do banco: ")
+    if nome_banco not in bancos:
+        return None
+    return bancos[nome_banco]
+
+def checar_banco():
+    nome_banco=escolher_banco()
+    if nome_banco is None:
+        print("Banco não encontrado")
+        return None
+    return nome_banco
+
 def criar_banco():
     while True:
         nome_banco = input("Digite o nome do banco: ")
@@ -55,19 +68,6 @@ def criar_banco():
             bancos[nome_banco] = banco
             print(f"Banco {nome_banco} criado com sucesso!")
         break
-
-def escolher_banco():
-    nome_banco = input("Digite o nome do banco: ")
-    if nome_banco not in bancos:
-        return None
-    return bancos[nome_banco]
-
-def checar_banco():
-    nome_banco=escolher_banco()
-    if nome_banco is None:
-        print("Banco não encontrado")
-        return None
-    return nome_banco
 
 def checar_conta():
     numero = int(input("Digite o número da conta: "))
@@ -116,22 +116,42 @@ def sacar():
             return
         print(f"Saque realizado com sucesso! Saldo atual: R${conta.saldo}")
     return
+
 def transferir():
-    valor = float(input("Valor transferido: "))
-    numero_transferidor = int(input("Número da conta de quem irá transferir: "))
-    banco_transferidor = checar_banco()
-    if banco_transferidor is not None:
+        valor = float(input("Valor transferido: "))
+        numero_transferidor = int(input("Número da conta de quem irá transferir: "))
+        banco_transferidor = checar_banco()
+        if banco_transferidor is None:
+            print("Banco não encontrado. Tente novamente.")
+            return
+
+        conta_que_ira_transferir = None    
+        for conta_trasferidor in banco_transferidor.lista_contas:
+            if numero_transferidor == conta_trasferidor.numero:
+                conta_que_ira_transferir = conta_trasferidor
+                
+        if conta_que_ira_transferir is None:
+            print("Conta não encontrada.")
+            return     
+
         numero_destinatario = int(input("Número do destinatário: "))
         banco_destinatario = checar_banco()
-    if banco_destinatario is not None:
-        for conta in banco_transferidor.lista_contas:
-            if conta.numero == numero_transferidor:
-                conta.sacar(valor)
-        for conta in banco_destinatario.lista_contas:
-            if conta.numero == numero_destinatario:
-                conta.depositar(valor)
-            print(f"R${valor} transferido da conta {numero_transferidor} para a conta {numero_destinatario}")
+        if banco_destinatario is None:
+            print("Banco não encontrado. Tente novamente.")
+            return 
         
+        conta_que_ira_receber = None
+        for conta_destinatario in banco_destinatario.lista_contas:
+                if numero_destinatario == conta_destinatario.numero:
+                    conta_que_ira_receber = conta_destinatario
+        
+        if conta_que_ira_receber is None:
+            print("Conta não encontrada.")
+            return
+        
+        conta_que_ira_transferir.sacar(valor)
+        conta_que_ira_receber.depositar(valor)
+        print(f"R${valor} transferido da conta {numero_transferidor} para a conta {numero_destinatario}")
 
 def consultar_saldo():
     conta = checar_conta()
