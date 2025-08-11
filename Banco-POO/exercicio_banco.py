@@ -62,82 +62,95 @@ def escolher_banco():
         return None
     return bancos[nome_banco]
 
+def checar_banco():
+    nome_banco=escolher_banco()
+    if nome_banco is None:
+        print("Banco não encontrado")
+        return None
+    return nome_banco
+
 def checar_conta():
-    numero = input("Digite o número da conta: ")
+    numero = int(input("Digite o número da conta: "))
     banco=escolher_banco()
-    if banco is not None:
-        for conta in banco.lista_contas:
-            if conta.numero==numero:
-                return conta
-    print("Banco ou conta não encontrados")
-    return None
-
-
+    if banco is None:
+        print("Banco ou conta não encontrados")
+        return
+    for conta in banco.lista_contas:
+        if conta.numero==numero:
+            return conta
 
 def criar_conta():
     while True:
+        saldo = float(input("Digite o saldo inicial: "))
         titular = input("Digite o nome do titular: ")
-        numero = input("Digite o número da conta: ")
+        numero = int(input("Digite o número da conta: "))
         if titular == "" or numero == "":
             print("Nenhum elemento pode ser vazio. ")
             break
-        banco = escolher_banco()
-        saldo = float(input("Digite o saldo inicial: "))
-        conta_bancaria = Conta_bancaria(titular, numero, saldo)
-        banco.adicionar_conta(conta_bancaria)
-        print("Conta criada com sucesso!")
+        banco = checar_banco()
+        for conta in banco.lista_contas:
+            if conta.numero == numero:
+                print("Erro ao criar a conta")
+                return
+        if banco is not None:
+            conta_bancaria = Conta_bancaria(titular, numero, saldo)
+            banco.adicionar_conta(conta_bancaria)
+            print("Conta criada com sucesso!")
         break
 
 def depositar():
     valor = float(input("Digite o valor a ser depositado: "))
     conta = checar_conta()
-    if conta is None:
-        return
-    conta.depositar(valor)
+    if conta is not None:
+        conta.depositar(valor)
+        print(f"Depósito de R${valor} realizado com sucesso! Saldo atual: R${conta.saldo}")
+    return
 
 def sacar():
     valor = float(input("Digite o valor a ser sacado: "))
     conta = checar_conta()
-    if conta is None:
-        return
-    resultado = conta.sacar(valor)
-    if resultado == "Saldo insuficiente":
-        print(resultado)
-        return
-    print(f"Saque realizado com sucesso! Saldo atual: R${conta.saldo}")
-
+    if conta is not None:
+        resultado = conta.sacar(valor)
+        if resultado == "Saldo insuficiente":
+            print(resultado)
+            return
+        print(f"Saque realizado com sucesso! Saldo atual: R${conta.saldo}")
+    return
 def transferir():
-    numero_transferidor = input("Número da conta de quem irá transferir:")
-    banco_transferidor = escolher_banco()
     valor = float(input("Valor transferido: "))
-    numero_destinatario = input("Número do destinatário: ")
-    banco_destinatario = escolher_banco()
-    if banco_transferidor is None or banco_destinatario is None:
-        print("Banco ou conta não encontrados")
-        return
-    for conta in banco_transferidor.lista_contas:
-        if conta.numero == numero_transferidor:
-            conta.sacar(valor)
-    for conta in banco_destinatario.lista_contas:
-        if conta.numero == numero_destinatario:
-            conta.depositar(valor)
-    print(f"R${valor} transferido da conta {numero_transferidor} para a conta {numero_destinatario}")
+    numero_transferidor = int(input("Número da conta de quem irá transferir: "))
+    banco_transferidor = checar_banco()
+    if banco_transferidor is not None:
+        numero_destinatario = int(input("Número do destinatário: "))
+        banco_destinatario = checar_banco()
+    if banco_destinatario is not None:
+        for conta in banco_transferidor.lista_contas:
+            if conta.numero == numero_transferidor:
+                conta.sacar(valor)
+        for conta in banco_destinatario.lista_contas:
+            if conta.numero == numero_destinatario:
+                conta.depositar(valor)
+            print(f"R${valor} transferido da conta {numero_transferidor} para a conta {numero_destinatario}")
+        
 
 def consultar_saldo():
     conta = checar_conta()
-    conta.consultar_saldo()
+    print(conta)
+    if conta is not None:
+        conta.consultar_saldo()
+    return
 
 def mostrar_contas():
-    banco = escolher_banco()
+    banco = checar_banco()
     banco.mostrar_contas()
 
 def quantidade_contas():
-    banco = escolher_banco()
+    banco = checar_banco()
     quantidade = banco.quantidade_contas()
     print(f"Quantidade de contas no banco {banco.nome}: {quantidade}")
 
 def total_valor_em_contas():
-    banco = escolher_banco()
+    banco = checar_banco()
     total = banco.total_valor_em_contas()
     print(f"Total em contas no banco {banco.nome}: R${total}")
 
@@ -168,6 +181,6 @@ def menu_principal():
             else:
                 print("Opção inválida. Tente novamente.")
         except ValueError:
-            print("Entrada inválida. Por favor, digite um número.")
+            print("Entrada inválida. Por favor, digite um valor válido.")
             
 menu_principal()
