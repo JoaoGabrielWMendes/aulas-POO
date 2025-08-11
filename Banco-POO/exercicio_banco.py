@@ -1,4 +1,5 @@
 import os
+import random
 bancos = {}
 class Conta_bancaria:
     def __init__(self, titular, numero, saldo):
@@ -55,6 +56,16 @@ def checar_banco():
         return None
     return nome_banco
 
+def checar_conta():
+    numero = int(input("Digite o número da conta: "))
+    banco=escolher_banco()
+    if banco is None:
+        print("Banco ou conta não encontrados")
+        return
+    for conta in banco.lista_contas:
+        if conta.numero==numero:
+            return conta
+
 def criar_banco():
     while True:
         nome_banco = input("Digite o nome do banco: ")
@@ -69,33 +80,23 @@ def criar_banco():
             print(f"Banco {nome_banco} criado com sucesso!")
         break
 
-def checar_conta():
-    numero = int(input("Digite o número da conta: "))
-    banco=escolher_banco()
-    if banco is None:
-        print("Banco ou conta não encontrados")
-        return
-    for conta in banco.lista_contas:
-        if conta.numero==numero:
-            return conta
-
 def criar_conta():
     while True:
         saldo = float(input("Digite o saldo inicial: "))
         titular = input("Digite o nome do titular: ")
-        numero = int(input("Digite o número da conta: "))
-        if titular == "" or numero == "":
+        numero = random.randint(1,9999)
+        if titular == "":
             print("Nenhum elemento pode ser vazio. ")
             break
         banco = checar_banco()
         for conta in banco.lista_contas:
             if conta.numero == numero:
-                print("Erro ao criar a conta")
+                numero = random.randint(1,9999)
                 return
         if banco is not None:
             conta_bancaria = Conta_bancaria(titular, numero, saldo)
             banco.adicionar_conta(conta_bancaria)
-            print("Conta criada com sucesso!")
+            print("Conta criada com sucesso! O número da conta é:", numero)
         break
 
 def depositar():
@@ -155,10 +156,10 @@ def transferir():
 
 def consultar_saldo():
     conta = checar_conta()
-    print(conta)
     if conta is not None:
         conta.consultar_saldo()
-    return
+        return
+    print("Conta não encontrada.")
 
 def mostrar_contas():
     banco = checar_banco()
