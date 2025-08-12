@@ -8,12 +8,19 @@ class Conta_bancaria:
         self.saldo = saldo
 
     def depositar(self, valor):
+        if valor is None or valor <= 0:
+            print("Valor de depósito inválido.")
+            return
         self.saldo += valor
         return
 
     def sacar(self, valor):
+        if valor is None or valor <= 0:
+            print("Valor de saque inválido.")
+            return
         if valor > self.saldo:
-            return ("Saldo insuficiente")
+            print("Saldo insuficiente.")
+            return
         self.saldo -= valor
         return 
 
@@ -22,9 +29,9 @@ class Conta_bancaria:
         return
 
 class Banco:
-    def __init__(self, nome, lista_contas):
+    def __init__(self, nome):
         self.nome = nome
-        self.lista_contas = lista_contas
+        self.lista_contas = []
 
     def adicionar_conta(self, conta_bancaria):
         self.lista_contas.append(conta_bancaria)
@@ -42,9 +49,10 @@ class Banco:
         for conta in self.lista_contas:
             total += conta.saldo
         return total
+    #float(sum(conta.saldo for conta in self.lista_contas))
 
 def escolher_banco():
-    nome_banco = input("Digite o nome do banco: ")
+    nome_banco = input("Digite o nome do banco: ").lower()
     if nome_banco not in bancos:
         return None
     return bancos[nome_banco]
@@ -68,11 +76,11 @@ def checar_conta():
 
 def criar_banco():
     while True:
-        nome_banco = input("Digite o nome do banco: ")
-        if nome_banco == "":
+        nome_banco = input("Digite o nome do banco: ").lower()
+        if not nome_banco.strip():
             print("Nome do banco não pode ser vazio.")
             break
-        banco = Banco(nome_banco, [])
+        banco = Banco(nome_banco)
         if nome_banco in bancos:
             print(f"Banco {nome_banco} já existe.")
         else:
@@ -85,7 +93,7 @@ def criar_conta():
         saldo = float(input("Digite o saldo inicial: "))
         titular = input("Digite o nome do titular: ")
         numero = random.randint(1,9999)
-        if titular == "":
+        if not titular.strip():
             print("Nenhum elemento pode ser vazio. ")
             break
         banco = checar_banco()
@@ -96,7 +104,7 @@ def criar_conta():
         if banco is not None:
             conta_bancaria = Conta_bancaria(titular, numero, saldo)
             banco.adicionar_conta(conta_bancaria)
-            print("Conta criada com sucesso! O número da conta é:", numero)
+            print(f"Conta criada com sucesso! O número da conta é: {numero}.")
         break
 
 def depositar():
